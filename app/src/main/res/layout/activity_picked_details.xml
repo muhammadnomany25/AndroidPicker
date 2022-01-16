@@ -97,6 +97,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="4"
+                                android:gravity="start"
+                                android:textAlignment="viewStart"
                                 tools:text="dummy details dummy details dummy details dummy details " />
                         </LinearLayout>
 
@@ -120,6 +122,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="4"
+                                android:gravity="start"
+                                android:textAlignment="viewStart"
                                 tools:text="dummy details dummy details dummy details dummy details " />
                         </LinearLayout>
 
@@ -165,7 +169,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="4"
+                                android:gravity="start"
                                 android:text="@{dataModel.name}"
+                                android:textAlignment="viewStart"
                                 tools:text="dummy details dummy details dummy details dummy details " />
                         </LinearLayout>
 
@@ -188,7 +194,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="4"
+                                android:gravity="start"
                                 android:text="@{dataModel.filePath}"
+                                android:textAlignment="viewStart"
                                 tools:text="dummy details dummy details dummy details dummy details " />
                         </LinearLayout>
 
@@ -211,7 +219,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="4"
+                                android:gravity="start"
                                 android:text="@{dataModel.fileSize}"
+                                android:textAlignment="viewStart"
                                 tools:text="dummy details dummy details dummy details dummy details " />
                         </LinearLayout>
 
