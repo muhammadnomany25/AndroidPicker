@@ -55,4 +55,8 @@ dependencies {
 
     // MultiDex Support
     implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Exo Player
+    implementation 'com.google.android.exoplayer:exoplayer:2.11.4'
+
 }
