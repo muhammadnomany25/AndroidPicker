@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.alphaapps.pickermodule">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application>
+        <activity
+            android:name=".pickers.CameraPicker"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".pickers.GalleryPicker"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".permissions.GetPermissions"
+            android:theme="@style/Theme.Transparent" />
+    </application>
+</manifest>

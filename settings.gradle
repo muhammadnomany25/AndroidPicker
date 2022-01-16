@@ -1,0 +1,3 @@
+include ':pickermodule'
+include ':app'
+rootProject.name = "AndroidPickerApp"
