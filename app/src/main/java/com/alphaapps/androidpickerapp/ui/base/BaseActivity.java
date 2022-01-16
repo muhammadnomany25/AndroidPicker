@@ -7,10 +7,16 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 
+import com.alphaapps.androidpickerapp.data.shared_prefs.UserSaver;
 import com.alphaapps.androidpickerapp.utils.LocalityUtil;
+
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 
 /**
  * Created by Muhammad Noamany
@@ -19,9 +25,10 @@ import com.alphaapps.androidpickerapp.utils.LocalityUtil;
 
 public abstract class BaseActivity<Binding extends ViewDataBinding> extends AppCompatActivity {
     public static final short NO_LAYOUT = -1;
-
     protected Binding binding;
     protected boolean isArabic;
+    @Inject
+    UserSaver userSaver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,27 +39,31 @@ public abstract class BaseActivity<Binding extends ViewDataBinding> extends AppC
         restrictAppUiMode();
     }
 
+    /**
+     * Restrict Dark Mode in the app
+     */
     public void restrictAppUiMode() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 
+    /**
+     * Initialization of injection stuff
+     */
     private void inject() {
-//        AndroidInjection.inject(this);
+        AndroidInjection.inject(this);
     }
 
-    void setLocality() {
-//        setLocality(userSaver);
-    }
-
-//    public void setLocality(UserSaver userSaver) {
-//        isArabic = userSaver.isArabic();
-//        LocalityUtil.getInstance().setLocality(this, isArabic ? "ar" : "en");
-//    }
-
-    void setLocality(boolean isArabic) {
+    /**
+     * Set locality lang
+     */
+    public void setLocality() {
+        isArabic = userSaver.isArabic();
         LocalityUtil.getInstance().setLocality(this, isArabic ? "ar" : "en");
     }
 
+    /**
+     * Set the binding views to the activity
+     */
     private void bindView() {
         if (getLayoutId() == NO_LAYOUT) return;
         binding = DataBindingUtil.setContentView(this, getLayoutId());
@@ -60,6 +71,16 @@ public abstract class BaseActivity<Binding extends ViewDataBinding> extends AppC
         binding.executePendingBindings();
     }
 
+    /**
+     * Setup the activity toolbar
+     */
+    protected void setUpToolbar(Toolbar toolbar, int indicatorResId, String title, boolean displayHomeAsUp) {
+        toolbar.setTitle(title != null ? title : "");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(displayHomeAsUp);
+        if (indicatorResId != -1)
+            getSupportActionBar().setHomeAsUpIndicator(indicatorResId);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

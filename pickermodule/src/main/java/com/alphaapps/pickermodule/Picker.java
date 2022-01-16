@@ -9,12 +9,15 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.alphaapps.pickermodule.callbacks.IGalleryPickType;
 import com.alphaapps.pickermodule.callbacks.IPickerResult;
 import com.alphaapps.pickermodule.constants.Constants;
 import com.alphaapps.pickermodule.constants.PickType;
+import com.alphaapps.pickermodule.constants.PickedFileType;
 import com.alphaapps.pickermodule.data.ResultData;
 import com.alphaapps.pickermodule.pickers.CameraPicker;
 import com.alphaapps.pickermodule.pickers.GalleryPicker;
+import com.alphaapps.pickermodule.pickers.gallery_pick_type_dialog.GalleryPickerTypeDialog;
 import com.alphaapps.pickermodule.utils.PermissionUtil;
 import com.google.gson.Gson;
 
@@ -30,7 +33,7 @@ import static com.alphaapps.pickermodule.constants.Constants.ACTION_PERMISSIONS_
  * @Date: 1/13/2022
  * @Email: muhammadnoamany@gmail.com
  */
-public class Picker extends BroadcastReceiver {
+public class Picker extends BroadcastReceiver implements IGalleryPickType {
     private Context context;
     private IPickerResult iPickerResult;
     private int pickType;
@@ -154,10 +157,10 @@ public class Picker extends BroadcastReceiver {
     }
 
     /**
-     * Start Gallery Picker
+     * Start Gallery Picker Sheet dialog pick
      */
     private void handleGalleryPicker() {
-        context.startActivity(new Intent(context, GalleryPicker.class));
+        new GalleryPickerTypeDialog(context, this).show();
     }
 
     /**
@@ -165,5 +168,24 @@ public class Picker extends BroadcastReceiver {
      */
     private void handleCameraPicker() {
         context.startActivity(new Intent(context, CameraPicker.class));
+    }
+
+    /**
+     * On user chooses gallery image picker
+     */
+    @Override
+    public void onImagePick() {
+        Intent intent =new Intent(context, GalleryPicker.class);
+        intent.putExtra(Constants.GALLERY_PICK_TYPE_INIT, PickedFileType.IMAGE.getValue());
+        context.startActivity(intent);
+    }
+    /**
+     * On user chooses gallery video picker
+     */
+    @Override
+    public void onVideoPick() {
+        Intent intent =new Intent(context, GalleryPicker.class);
+        intent.putExtra(Constants.GALLERY_PICK_TYPE_INIT, PickedFileType.VIDEO.getValue());
+        context.startActivity(intent);
     }
 }

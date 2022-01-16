@@ -10,6 +10,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.alphaapps.pickermodule.utils.IntentUtils.getImagePickerIntent;
+import static com.alphaapps.pickermodule.utils.IntentUtils.getVideoPickerIntent;
+
 /**
  * The super class for pickers
  * have most common and needed methods for picker to work
@@ -58,15 +61,18 @@ abstract class BasePicker extends AppCompatActivity {
     }
 
     /**
-     * Open gallery picker intent
+     * Open gallery image picker intent
      */
-    protected void openForGalleryPick() {
+    protected void openGalleryForPickImage() {
         initLauncher();
-        String[] types = {"image/*", "video/*"};
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, types);
-        resultLauncher.launch(intent);
+        resultLauncher.launch(getImagePickerIntent());
+    }
+
+    /**
+     * Open gallery video picker intent
+     */
+    protected void openGalleryForPickVideo() {
+        initLauncher();
+        resultLauncher.launch(getVideoPickerIntent());
     }
 }

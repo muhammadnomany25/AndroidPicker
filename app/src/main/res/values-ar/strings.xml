@@ -1,0 +1,14 @@
+<resources>
+    <string name="home">الرئيسية</string>
+    <string name="name">الاسم:</string>
+    <string name="path">المسار:</string>
+    <string name="size">الحجم:</string>
+    <string name="type">النوع:</string>
+    <string name="width">العرض:</string>
+    <string name="height">الارتفاع:</string>
+    <string name="details">التفاصيل</string>
+    <string name="language_settings">اعدادات اللغة</string>
+
+    <string name="pick_from_gallery">اختر من المعرض</string>
+    <string name="pick_from_camera">التقط من الكاميرا</string>
+</resources>

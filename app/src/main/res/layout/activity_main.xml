@@ -8,12 +8,19 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.MainActivity">
 
+        <include
+            android:id="@+id/appBarLayout"
+            layout="@layout/layout_app_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cameraPick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onCameraPickClicked"
-            android:text="Pick From Camera"
+            android:text="@string/pick_from_camera"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:onClick="onGalleryPickClicked"
-            android:text="Pick From Gallery"
+            android:text="@string/pick_from_gallery"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cameraPick" />

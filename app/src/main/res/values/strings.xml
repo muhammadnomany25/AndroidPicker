@@ -1,8 +1,14 @@
 <resources>
-    <string name="app_name">AndroidPickerApp</string>
-    <string name="details">Details</string>
+    <string name="app_name" translatable="false">Android Picker App</string>
+    <string name="home">Home</string>
     <string name="name">name:</string>
     <string name="path">path:</string>
     <string name="size">size:</string>
     <string name="type">type:</string>
+    <string name="width">Width:</string>
+    <string name="height">Height:</string>
+    <string name="details">Details</string>
+    <string name="language_settings">Language Settings</string>
+    <string name="pick_from_gallery">Pick From Gallery</string>
+    <string name="pick_from_camera">Pick From Camera</string>
 </resources>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="must_accept_permissions">يجب عليك قبول الأذونات أولا</string>
+    <string name="image_picker">اختيار صوره</string>
+    <string name="video_picker">اختيار فيديو</string>
+    <string name="choose_pick_type">اختر</string>
 </resources>

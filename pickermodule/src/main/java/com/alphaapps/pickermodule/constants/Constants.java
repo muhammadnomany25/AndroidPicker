@@ -18,5 +18,6 @@ public class Constants {
     public static final String PERMISSIONS_KEY = "permissions";
     public static final String ACTION_PERMISSIONS_GRANTED = "GetPermissions.permissions_granted";
     public static final String ACTION_PERMISSIONS_DENIED = "GetPermissions.permissions_denied";
+    public static final String GALLERY_PICK_TYPE_INIT = "type";
 
 }

@@ -13,16 +13,17 @@ import android.os.Parcelable;
  */
 public class ResultData implements Parcelable {
     private String name, fileSize, filePath;
-    private int type;
+    private boolean isVideo;
 
     public ResultData() {
     }
+
 
     protected ResultData(Parcel in) {
         name = in.readString();
         fileSize = in.readString();
         filePath = in.readString();
-        type = in.readInt();
+        isVideo = in.readByte() != 0;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class ResultData implements Parcelable {
         dest.writeString(name);
         dest.writeString(fileSize);
         dest.writeString(filePath);
-        dest.writeInt(type);
+        dest.writeByte((byte) (isVideo ? 1 : 0));
     }
 
     @Override
@@ -74,11 +75,11 @@ public class ResultData implements Parcelable {
         this.filePath = filePath;
     }
 
-    public int getType() {
-        return type;
+    public boolean isVideo() {
+        return isVideo;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setVideo(boolean video) {
+        isVideo = video;
     }
 }

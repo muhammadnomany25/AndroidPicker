@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="must_accept_permissions">You must accept permissions first</string>
+    <string name="image_picker">Image Picker</string>
+    <string name="video_picker">Video Picker</string>
+    <string name="choose_pick_type">Choose Pick Type</string>
 </resources>
