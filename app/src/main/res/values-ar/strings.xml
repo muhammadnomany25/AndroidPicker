@@ -11,4 +11,11 @@
 
     <string name="pick_from_gallery">اختر من المعرض</string>
     <string name="pick_from_camera">التقط من الكاميرا</string>
+
+    <string name="change_app_lang_title">تغيير اللغة</string>
+    <string name="change_app_lang_msg">هل أنت متأكد من تبديل لغة التطبيق إلى اللغة الإنجليزية ؟ </string>
+
+    <string name="change_app_lang_yes">نعم</string>
+    <string name="change_app_lang_no">لا</string>
+
 </resources>

@@ -22,7 +22,7 @@ public class UserSaver {
         return preferences.getString(Preferences_LANGUAGE, "ar").equals("ar");
     }
 
-    private void setAppLanguage(String lang) {
+    public void setAppLanguage(String lang) {
         editor.putString(Preferences_LANGUAGE, lang).apply();
     }
 }
