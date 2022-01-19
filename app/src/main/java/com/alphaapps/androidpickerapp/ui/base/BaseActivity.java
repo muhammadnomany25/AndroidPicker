@@ -1,5 +1,6 @@
 package com.alphaapps.androidpickerapp.ui.base;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -28,7 +29,7 @@ public abstract class BaseActivity<Binding extends ViewDataBinding> extends AppC
     protected Binding binding;
     protected boolean isArabic;
     @Inject
-    UserSaver userSaver;
+    public UserSaver userSaver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -15,6 +15,8 @@ import com.alphaapps.pickermodule.data.ResultData;
 public class DetailsVM extends ViewModel {
     private MutableLiveData<ResultData> pickedFileData = new MutableLiveData<>(); // LiveData object to save picked file data
     private MutableLiveData<Bitmap> takenCameraPhoto = new MutableLiveData<>();// LiveData object to save camera taken photo
+    private MutableLiveData<Integer> windowIndexData = new MutableLiveData<>(0);// LiveData object to save windowIndex of exo player
+    private MutableLiveData<Long> positionMilliSecondData = new MutableLiveData<>(0L);// LiveData object to save  position milliSecond of exo player
 
     /**
      * Save picked file data to live data object
@@ -31,6 +33,20 @@ public class DetailsVM extends ViewModel {
     }
 
     /**
+     * Set the positionMilliSecond on ExoPlayer progress update
+     */
+    public void setPositionMilliSecond(long positionMilliSecond) {
+        positionMilliSecondData.setValue(positionMilliSecond);
+    }
+
+    /**
+     * Set the v on ExoPlayer progress update
+     */
+    public void setWindowIndex(int windowIndex) {
+        windowIndexData.setValue(windowIndex);
+    }
+
+    /**
      * Return liveData object to observe the data
      */
     public MutableLiveData<ResultData> getPickedFileData() {
@@ -42,5 +58,19 @@ public class DetailsVM extends ViewModel {
      */
     public MutableLiveData<Bitmap> getTakenCameraPhoto() {
         return takenCameraPhoto;
+    }
+
+    /**
+     * Return liveData object to observe the data
+     */
+    public MutableLiveData<Integer> getWindowIndexData() {
+        return windowIndexData;
+    }
+
+    /**
+     * Return liveData object to observe the data
+     */
+    public MutableLiveData<Long> getPositionMilliSecondData() {
+        return positionMilliSecondData;
     }
 }

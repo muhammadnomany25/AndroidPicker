@@ -11,4 +11,10 @@
     <string name="language_settings">Language Settings</string>
     <string name="pick_from_gallery">Pick From Gallery</string>
     <string name="pick_from_camera">Pick From Camera</string>
+
+    <string name="change_app_lang_title">Change language</string>
+    <string name="change_app_lang_msg">Are you sure changing app language to Arabic ?</string>
+    <string name="change_app_lang_yes">Yes</string>
+    <string name="change_app_lang_no">No</string>
+
 </resources>
