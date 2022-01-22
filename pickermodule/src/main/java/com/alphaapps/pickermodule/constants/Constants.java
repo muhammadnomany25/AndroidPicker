@@ -15,6 +15,7 @@ public class Constants {
     public static String[] CAMERA_PERMISSIONS = {Manifest.permission.CAMERA};
     public static final String ACTION_CAMERA_RESULT = "CameraPicker.result";
     public static final String ACTION_GALLERY_RESULT = "GalleryPicker.result";
+    public static final String ACTION_GALLERY_ERROR_RESULT = "GalleryPicker.error.result";
     public static final String PERMISSIONS_KEY = "permissions";
     public static final String ACTION_PERMISSIONS_GRANTED = "GetPermissions.permissions_granted";
     public static final String ACTION_PERMISSIONS_DENIED = "GetPermissions.permissions_denied";

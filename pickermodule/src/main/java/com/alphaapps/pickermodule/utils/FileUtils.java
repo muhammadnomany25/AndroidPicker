@@ -1,22 +1,12 @@
 package com.alphaapps.pickermodule.utils;
 
-import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.alphaapps.pickermodule.pickers.GalleryPicker;
-
-import java.io.File;
 import java.text.DecimalFormat;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @usage: Helper class for Files features
@@ -25,190 +15,71 @@ import java.util.regex.Pattern;
  * @Email: muhammadnoamany@gmail.com
  */
 public class FileUtils {
+    private static final String LOG_TAG = FileUtils.class.getSimpleName();
+    private static final String[] SIZE_UNITS = new String[]{"B", "KB", "MB", "GB", "TB"};   // File size units
+    private static final String SIZE_FORMAT = "#,##0.#";   // th decimal format of file sizes
+    private static final String ZERO_FILE_SIZE = "0";   //  zero file size value
+
     /**
      * Return Readable size of file
      */
     public static String getFileSize(long size) {
         if (size <= 0)
-            return "0";
+            return ZERO_FILE_SIZE;
 
-        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
 
-        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+        return new DecimalFormat(SIZE_FORMAT).format(size / Math.pow(1024, digitGroups)) + " " + SIZE_UNITS[digitGroups];
     }
 
-
     /**
-     * Method for return file path of Gallery image/ Document / Video / Audio
+     * Method for return file path of Gallery Picked Image
      *
      * @param context
      * @param uri
      * @return path of the selected image file from gallery
      */
-    public static String getPath(final Context context, final Uri uri) {
-
+    public static String getImagePath(Context context, Uri uri) {
         try {
-            // check here to KITKAT or new version
-            final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            // DocumentProvider
-            if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            Cursor cursor = context.getContentResolver().query(uri,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
 
-                // ExternalStorageProvider
-                if (isExternalStorageDocument(uri)) {
-                    final String docId = DocumentsContract.getDocumentId(uri);
-                    final String[] split = docId.split(":");
-                    final String type = split[0];
-
-                    if ("primary".equalsIgnoreCase(type)) {
-                        return Environment.getExternalStorageDirectory() + "/"
-                                + split[1];
-                    }
-                }
-                // DownloadsProvider
-                else if (isDownloadsDocument(uri)) {
-
-                    final String id = DocumentsContract.getDocumentId(uri);
-                    final Uri contentUri = ContentUris.withAppendedId(
-                            Uri.parse("content://downloads/public_downloads"),
-                            Long.valueOf(id));
-
-                    return getDataColumn(context, contentUri, null, null);
-                }
-                // MediaProvider
-                else if (isMediaDocument(uri)) {
-                    final String docId = DocumentsContract.getDocumentId(uri);
-                    final String[] split = docId.split(":");
-                    final String type = split[0];
-
-                    Uri contentUri = null;
-                    if ("image".equals(type)) {
-                        contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                    } else if ("video".equals(type)) {
-                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                    } else if ("audio".equals(type)) {
-                        contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                    }
-
-                    final String selection = "_id=?";
-                    final String[] selectionArgs = new String[]{split[1]};
-
-                    return getDataColumn(context, contentUri, selection,
-                            selectionArgs);
-                }
-            }
-            // MediaStore (and general)
-            else if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-                // Return the remote address
-                if (isGooglePhotosUri(uri))
-                    return uri.getLastPathSegment();
-
-                return getDataColumn(context, uri, null, null);
-            }
-            // File
-            else if ("file".equalsIgnoreCase(uri.getScheme())) {
-                return uri.getPath();
-            }
-        } catch (Exception e) {
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            return picturePath;
+        } catch (NullPointerException e) {
             e.printStackTrace();
+            Log.e(LOG_TAG, e.getLocalizedMessage());
+            return null;
         }
-        return null;
     }
 
     /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
+     * Method for return file path of Gallery Picked Video
      *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     */
-    public static String getDataColumn(Context context, Uri uri,
-                                       String selection, String[] selectionArgs) {
-
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {column};
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection,
-                    selection, selectionArgs, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri
-                .getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri
-                .getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri
-                .getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
-     */
-    public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri
-                .getAuthority());
-    }
-
-    /**
-     * Method for return file path of USB image/ Document / Video / Audio
-     *
+     * @param context
      * @param uri
-     * @return path of the selected image file from gallery
+     * @return path of the selected video file from gallery
      */
-    public static String getDocumentPath(final Uri uri) {
+    public static String getVideoPath(Context context, Uri uri) {
         try {
-            String selectedFilePath = uri.getPath();
-            if (selectedFilePath.contains("/document/")) {
-                selectedFilePath = selectedFilePath.replace("/document/", "/storage/");
-            }
-            if (selectedFilePath.contains(":")) {
-                selectedFilePath = selectedFilePath.replace(":", "/");
-            }
-            final File file = new File(selectedFilePath);
-            if (file.exists()) {
-                String FilePath = file.getPath();
-                if (FilePath.endsWith(".mp4") || FilePath.endsWith(".3gp") || FilePath.endsWith(".avi")) {
-                    return FilePath;
-                }
-            }
-        } catch (Exception e) {
+            String[] filePathColumn = {MediaStore.Video.Media.DATA};
+            Cursor cursor = context.getContentResolver().query(uri,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String videoPath = cursor.getString(columnIndex);
+            cursor.close();
+            return videoPath;
+        } catch (NullPointerException e) {
             e.printStackTrace();
+            Log.e(LOG_TAG, e.getLocalizedMessage());
+            return null;
         }
-        return null;
     }
 }

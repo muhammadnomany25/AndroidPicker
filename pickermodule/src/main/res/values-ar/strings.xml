@@ -4,4 +4,5 @@
     <string name="image_picker">اختيار صوره</string>
     <string name="video_picker">اختيار فيديو</string>
     <string name="choose_pick_type">اختر</string>
+    <string name="error_happened">حدث خطأ ، يرجى المحاولة مرة أخرى!</string>
 </resources>

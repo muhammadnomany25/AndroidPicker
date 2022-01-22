@@ -22,6 +22,7 @@ import com.alphaapps.pickermodule.utils.PermissionUtil;
 import com.google.gson.Gson;
 
 import static com.alphaapps.pickermodule.constants.Constants.ACTION_CAMERA_RESULT;
+import static com.alphaapps.pickermodule.constants.Constants.ACTION_GALLERY_ERROR_RESULT;
 import static com.alphaapps.pickermodule.constants.Constants.ACTION_GALLERY_RESULT;
 import static com.alphaapps.pickermodule.constants.Constants.ACTION_PERMISSIONS_DENIED;
 import static com.alphaapps.pickermodule.constants.Constants.ACTION_PERMISSIONS_GRANTED;
@@ -57,6 +58,7 @@ public class Picker extends BroadcastReceiver implements IGalleryPickType {
         intentFilter.addAction(ACTION_PERMISSIONS_DENIED);
         intentFilter.addAction(ACTION_CAMERA_RESULT);
         intentFilter.addAction(ACTION_GALLERY_RESULT);
+        intentFilter.addAction(ACTION_GALLERY_ERROR_RESULT);
         context.registerReceiver(this, intentFilter);
     }
 
@@ -95,7 +97,21 @@ public class Picker extends BroadcastReceiver implements IGalleryPickType {
                 iPickerResult.onCameraResult(resultData);
                 break;
             }
+            // case camera take photo  result
+            case ACTION_GALLERY_ERROR_RESULT: {
+                showErrorToast(context, intent);
+                break;
+            }
         }
+    }
+
+    /**
+     * Show the error message returned from intent
+     */
+    private void showErrorToast(Context context, Intent intent) {
+        Log.e("pickResult", "ACTION_GALLERY_ERROR_RESULT");
+        String resultError = intent.getExtras().getString("result");
+        Toast.makeText(context, resultError, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -119,7 +135,7 @@ public class Picker extends BroadcastReceiver implements IGalleryPickType {
     /**
      * start gallery picker process
      */
-    public  void startGalleryPicker() {
+    public void startGalleryPicker() {
         this.pickType = PickType.GALLERY.getValue();
         initReceiver();
         checkForGalleryPick();
@@ -175,16 +191,17 @@ public class Picker extends BroadcastReceiver implements IGalleryPickType {
      */
     @Override
     public void onImagePick() {
-        Intent intent =new Intent(context, GalleryPicker.class);
+        Intent intent = new Intent(context, GalleryPicker.class);
         intent.putExtra(Constants.GALLERY_PICK_TYPE_INIT, PickedFileType.IMAGE.getValue());
         context.startActivity(intent);
     }
+
     /**
      * On user chooses gallery video picker
      */
     @Override
     public void onVideoPick() {
-        Intent intent =new Intent(context, GalleryPicker.class);
+        Intent intent = new Intent(context, GalleryPicker.class);
         intent.putExtra(Constants.GALLERY_PICK_TYPE_INIT, PickedFileType.VIDEO.getValue());
         context.startActivity(intent);
     }

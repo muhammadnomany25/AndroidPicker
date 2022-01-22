@@ -6,18 +6,19 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.alphaapps.pickermodule.R;
 import com.alphaapps.pickermodule.constants.Constants;
 import com.alphaapps.pickermodule.constants.PickedFileType;
 import com.alphaapps.pickermodule.data.ResultData;
+import com.alphaapps.pickermodule.utils.FileUtils;
 import com.google.gson.Gson;
 
+import static com.alphaapps.pickermodule.constants.Constants.ACTION_GALLERY_ERROR_RESULT;
 import static com.alphaapps.pickermodule.constants.Constants.ACTION_GALLERY_RESULT;
 import static com.alphaapps.pickermodule.utils.FileUtils.getFileSize;
-import static com.alphaapps.pickermodule.utils.FileUtils.getPath;
 
 /**
  * Camera picker activity that handles the picking from gallery for a video or an image
@@ -54,6 +55,19 @@ public class GalleryPicker extends BasePicker {
      * Handle selection result for both images and videos
      */
     private void handleResult(Uri selectedMediaUri) {
+
+        if (getPickedMediaPath(selectedMediaUri) == null)
+            sendErrorResult();
+        else {
+            fetchPickedFileInfo(selectedMediaUri);
+        }
+
+    }
+
+    /**
+     * Gather info of the selected file and send it to Picker class
+     */
+    private void fetchPickedFileInfo(Uri selectedMediaUri) {
         ResultData resultData = new ResultData();
         // https://developer.android.com/training/secure-file-sharing/retrieve-info
 
@@ -70,8 +84,16 @@ public class GalleryPicker extends BasePicker {
         resultData.setName(returnCursor.getString(nameIndex));
         resultData.setFileSize(getFileSize(returnCursor.getLong(sizeIndex)));
         resultData.setVideo(!isImagePick());
-        resultData.setFilePath(getPath(this, selectedMediaUri));
+        resultData.setFilePath(getPickedMediaPath(selectedMediaUri));
         sendResult(resultData);
+    }
+
+    private String getPickedMediaPath(Uri selectedMediaUri) {
+        if (isImagePick())
+            return FileUtils.getImagePath(this, selectedMediaUri);
+        else
+            return FileUtils.getVideoPath(this, selectedMediaUri);
+
     }
 
     /**
@@ -80,6 +102,16 @@ public class GalleryPicker extends BasePicker {
     private void sendResult(ResultData resultData) {
         Intent intent = new Intent(ACTION_GALLERY_RESULT);
         intent.putExtra("result", new Gson().toJson(resultData));
+        sendBroadcast(intent);
+        finish();
+    }
+
+    /**
+     * Send broadcast with an error during fetching path of picked file {will be received by Picker Class}
+     */
+    private void sendErrorResult() {
+        Intent intent = new Intent(ACTION_GALLERY_ERROR_RESULT);
+        intent.putExtra("result", getString(R.string.error_happened));
         sendBroadcast(intent);
         finish();
     }
