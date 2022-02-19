@@ -16,7 +16,8 @@ import com.alphaapps.androidpickerapp.databinding.ActivityMainBinding;
 import com.alphaapps.androidpickerapp.ui.base.BaseActivity;
 import com.alphaapps.androidpickerapp.ui.picked_details.PickedDetailsActivity;
 import com.alphaapps.pickermodule.Picker;
-import com.alphaapps.pickermodule.callbacks.IPickerResult;
+import com.alphaapps.pickermodule.callbacks.ICameraPickerResult;
+import com.alphaapps.pickermodule.callbacks.IGalleryPickerResult;
 import com.alphaapps.pickermodule.data.ResultData;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -24,7 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
  * Created by Muhammad Noamany
  * Email: muhammadnoamany@gmail.com
  */
-public class MainActivity extends BaseActivity<ActivityMainBinding> implements IPickerResult {
+public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private Picker picker;
 
     /**
@@ -49,28 +50,28 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements I
         return R.layout.activity_main;
     }
 
-    @Override
-    public void onCameraResult(Bitmap bitmap) {
-        PickedDetailsActivity.start(this, bitmap);
-    }
-
-    @Override
-    public void onGalleryResult(ResultData resultObject) {
-        PickedDetailsActivity.start(this, resultObject);
-    }
-
     /**
      * On Pick from camera btn clicked
      */
     public void onCameraPickClicked(View view) {
-        picker.startCameraPicker();
+        picker.startCameraPicker(new ICameraPickerResult() {
+            @Override
+            public void onResult(Bitmap bitmap) {
+                PickedDetailsActivity.start(MainActivity.this, bitmap);
+            }
+        });
     }
 
     /**
      * On Pick from gallery btn clicked
      */
     public void onGalleryPickClicked(View view) {
-        picker.startGalleryPicker();
+        picker.startGalleryImagePicker(new IGalleryPickerResult() {
+            @Override
+            public void onResult(ResultData resultObject) {
+                PickedDetailsActivity.start(MainActivity.this, resultObject);
+            }
+        });
     }
 
     /**

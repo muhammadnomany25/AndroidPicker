@@ -37,12 +37,10 @@ public class LocalityUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             LocaleList localeList = new LocaleList(locale);
             LocaleList.setDefault(localeList);
-//            Locale.setDefault(locale);
             configuration.setLocales(localeList);
             configuration.setLocale(locale);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             configuration.setLocale(locale);
-
         } else {
             configuration.locale = locale;
         }
